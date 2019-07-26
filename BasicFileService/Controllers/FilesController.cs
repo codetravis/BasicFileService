@@ -51,5 +51,16 @@ namespace BasicFileService.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult ListFiles()
+        {
+            string rootPath = config.GetSection("FileStorageTarget").Value;
+            IEnumerable<string> fileList = Directory.GetFiles(rootPath);
+
+            string fileString = fileList.ToArray().ToString();
+
+            return new JsonResult(fileList);
+        }
     }
 }
