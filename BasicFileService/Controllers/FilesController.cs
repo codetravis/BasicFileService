@@ -51,5 +51,23 @@ namespace BasicFileService.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult ListFiles()
+        {
+            string storagePath = config.GetSection("FileStorageTarget").Value;
+            IEnumerable<string> fileList = Directory.GetFiles(storagePath).Select(curFile => Path.GetFileName(curFile)).ToArray();
+
+            return new JsonResult(fileList);
+        }
+
+        [HttpGet("folders")]
+        public JsonResult ListDirectories()
+        {
+            string storagePath = config.GetSection("FileStorageTarget").Value;
+            IEnumerable<string> folderList = Directory.GetDirectories(storagePath).Select(curFolder => Path.GetFileName(curFolder)).ToArray();
+
+            return new JsonResult(folderList);
+        }
     }
 }
