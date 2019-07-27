@@ -56,9 +56,18 @@ namespace BasicFileService.Controllers
         public JsonResult ListFiles()
         {
             string storagePath = config.GetSection("FileStorageTarget").Value;
-            IEnumerable<string> fileList = Directory.GetFiles(storagePath).Select(file => Path.GetFileName(file)).ToArray();
+            IEnumerable<string> fileList = Directory.GetFiles(storagePath).Select(curFile => Path.GetFileName(curFile)).ToArray();
 
             return new JsonResult(fileList);
+        }
+
+        [HttpGet("folders")]
+        public JsonResult ListDirectories()
+        {
+            string storagePath = config.GetSection("FileStorageTarget").Value;
+            IEnumerable<string> folderList = Directory.GetDirectories(storagePath).Select(curFolder => Path.GetFileName(curFolder)).ToArray();
+
+            return new JsonResult(folderList);
         }
     }
 }
