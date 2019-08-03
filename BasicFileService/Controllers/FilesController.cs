@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
+using BasicFileService.FileAction;
 
 namespace BasicFileService.Controllers
 {
@@ -48,6 +49,21 @@ namespace BasicFileService.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("delete")]
+        public IActionResult DeleteFile([FromBody] FileAction fileAction)
+        {
+            string targetFilePath = fileAction.Path;
+            string storagePath = config.GetSection("FileStorageTarget").Value;
+            string pathToDelete = Path.Combine(storagePath, targetFilePath);
+
+            try {
+                Directory.Delete(pathToDelete);
+                return Ok("File Deleted");
+            } catch (Exception ex) {
                 return StatusCode(500, ex.Message);
             }
         }
